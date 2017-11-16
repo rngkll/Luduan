@@ -81,6 +81,16 @@ def get_ico(bot, update, args):
 					if whalecount<10:
 						answer = answer + "%s: %.2f \n" % (k, v)
 					whalecount += 1
+			elif args[0] == 'median':
+				txList = requests.get('http://api.etherscan.io/api?module=account&action=txlist&address=' + ico['contract'] + '&startblock=0&endblock=999999999&sort=asc&apikey=' + cfg['etherscan_token'] ).json()['result']
+				cont_dict = {'':''}
+				cont_funds = 0
+				for tx in txList:
+					if tx['isError'] == '0':
+						cont_dict[tx['from']]=int(tx['value'])/ethdiv
+						cont_funds = cont_funds + int(tx['value'])/ethdiv	
+				median = cont_funds / len(cont_dict)
+				answer = str(len(cont_dict)) + " different contributors have participated in the Token Sale with a median of " + str(median)
 		elif len(args)==2:
 			if args[0] == 'address':
 				totalBalance = requests.get('https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=' + ico['contract'] + '&address=' + args[1] + '&tag=latest&apikey='+ cfg['etherscan_token'] ).json()['result']

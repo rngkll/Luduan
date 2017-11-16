@@ -10,6 +10,7 @@ import argparse
 # Command modules
 import commands.cmdFAQ as FAQ
 import commands.cmdICO as ICO
+import commands.cmdDIVI as DIVI
 
 method = ''
 token = ''
@@ -42,12 +43,13 @@ def main():
 	token = cfg['token']
 	bot = telegram.Bot(token=token)
 
-
 	updater = Updater(token)
 	dp = updater.dispatcher
 	dp.add_handler(CommandHandler("help", help))
 	dp.add_handler(CommandHandler("question", FAQ.get_faq, pass_args=True))
 	dp.add_handler(CommandHandler("ico", ICO.get_ico, pass_args=True))
+	dp.add_handler(CommandHandler("divi", DIVI.divi, pass_args=True))
+	dp.add_handler(CommandHandler("test", DIVI.divi, pass_args=True))
 	updates = bot.getUpdates()
 	dp.add_error_handler(error)
 	updater.start_polling()
